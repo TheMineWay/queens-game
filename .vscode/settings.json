@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true,                // Automatically format on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"              // Automatically fix ESLint issues on save
+  },
+  "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact"],
+  "typescript.preferences.importModuleSpecifier": "non-relative", // Use absolute imports
+  "javascript.preferences.importModuleSpecifier": "non-relative", // Same for JavaScript
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#4e3a60",
+    "editorCursor.foreground": "#c792ea",
+    "editorLineNumber.foreground": "#a899ff"
+  }
+}
