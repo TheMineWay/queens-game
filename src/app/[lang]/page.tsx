@@ -8,6 +8,7 @@ import Link from "next/link";
 import GitHubIcon from "@/assets/social/github.png";
 import LinkedInIcon from "@/assets/social/linkedin.png";
 import { SOCIAL } from "@/constants/social.constants";
+import { ROUTES } from "@/constants/routes/routes";
 
 export default async function Home({ params: { lang } }: I18nParams) {
   const { home } = await getDictionary(lang);
@@ -17,9 +18,11 @@ export default async function Home({ params: { lang } }: I18nParams) {
       <div className="flex flex-col gap-4 text-center">
         <h1 className="text-4xl md:text-6xl w-full">{home.title.Title}</h1>
         <h2 className="text-lg md:text-xl w-full">{home.title.Subtitle}</h2>
-        <Button variant="secondary">
-          <Play className="mr-2 h-4 w-4" /> {home.title.actions.play.Text}
-        </Button>
+        <Link href={ROUTES.game()}>
+          <Button variant="secondary">
+            <Play className="mr-2 h-4 w-4" /> {home.title.actions.play.Text}
+          </Button>
+        </Link>
         <div className="flex gap-2 justify-center">
           <Link href={SOCIAL.repository} target="_blank">
             <Image
