@@ -5,6 +5,8 @@ import { LOCALES } from "@/constants/i18n/locales";
 import { Locale } from "@/constants/i18n/locale.enum";
 import { getDictionary } from "@/i18n/dictionary.utils";
 import { I18nParams } from "@/types/i18n/i18n-params.type";
+import { mainFont } from "@/ui/fonts/fonts";
+import clsx from "clsx";
 
 export async function generateMetadata({
   params: { lang },
@@ -35,7 +37,9 @@ export default function RootLayout({
 >) {
   return (
     <html lang={lang}>
-      <body>{children}</body>
+      <body className={clsx(mainFont.className, "h-screen w-screen px-4")}>
+        <div className="w-full h-full">{children}</div>
+      </body>
     </html>
   );
 }

@@ -1,5 +1,24 @@
 {
     "layout": {
         "Title": "Queens game"
+    },
+    "home": {
+        "title": {
+            "Title": "Queens game",
+            "Subtitle": "Play infinite rounds. Each uniquely generated for you 💖",
+            "actions": {
+                "play": {
+                    "Text": "Start playing"
+                }
+            },
+            "social": {
+                "github": {
+                    "Alt": "Project GitHub repository"
+                },
+                "linkedin": {
+                    "Alt": "Author's LinkedIn"
+                }
+            }
+        }
     }
 }
