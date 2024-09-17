@@ -26,21 +26,21 @@ const BOARD_MOCKS: {
   },
   {
     colorMap: [
-      ["ACDE12", "FFFFFF", "FFFFFF", "FFFFFF"],
-      ["ACDE12", "ACDE12", "FFFFFF", "000000"],
-      ["ACDE12", "ACDE12", "FFFFFF", "000000"],
-      ["151515", "BABABA", "000000", "000000"],
-      ["BABABA", "BABABA", "000000", "000000"],
+      ["ACDE12", "FFFFFF", "FFFFFF", "FFFFFF", "991199"],
+      ["ACDE12", "ACDE12", "FFFFFF", "000000", "991199"],
+      ["ACDE12", "ACDE12", "FFFFFF", "000000", "991199"],
+      ["151515", "BABABA", "000000", "000000", "991199"],
+      ["BABABA", "BABABA", "000000", "000000", "991199"],
     ],
     boardDefinition: {
       board: [
-        [0, 3, 3, 3],
-        [0, 0, 3, 4],
-        [0, 0, 3, 4],
-        [2, 1, 4, 4],
-        [1, 1, 4, 4],
+        [0, 3, 3, 3, 5],
+        [0, 0, 3, 4, 5],
+        [0, 0, 3, 4, 5],
+        [2, 1, 4, 4, 5],
+        [1, 1, 4, 4, 5],
       ],
-      colors: ["ACDE12", "BABABA", "151515", "FFF", "000"],
+      colors: ["ACDE12", "BABABA", "151515", "FFF", "000", "991199"],
     },
   },
 ];
@@ -53,14 +53,14 @@ describe("<Board/>", () => {
   it("should render a board with corresponding background color", () => {
     BOARD_MOCKS.forEach(({ boardDefinition, colorMap }) => {
       const { container } = renderComponent(boardDefinition);
-      const table = container.querySelector("table");
+      const cells = container.querySelectorAll<HTMLElement>(
+        'div[aria-label="board container"] > div'
+      );
 
       for (let i = 0; i < boardDefinition.board.length; i++) {
-        const tr = table?.querySelectorAll("tr")[i];
         for (let l = 0; l < boardDefinition.board[i].length; l++) {
-          const td = tr?.querySelectorAll("td")[l];
-
-          expect(Color.toHex(td?.style.backgroundColor ?? null)).toEqual(
+          const cell = cells[i * boardDefinition.board.length + l];
+          expect(Color.toHex(cell?.style.backgroundColor ?? null)).toEqual(
             Color.toHex(colorMap[i][l])
           );
         }
