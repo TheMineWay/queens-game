@@ -1,10 +1,12 @@
 "use client";
 
-import type { Board as BoardType } from "@/types/game/board.type";
+import { BoardDefinition } from "@/types/game/board-definition.interface";
 
-type Props = { board: BoardType };
+type Props = { board: BoardDefinition };
 
-export default function Board({ board }: Props) {
+export default function Board({ board: boardDefinition }: Props) {
+  const { board, colors } = boardDefinition;
+
   return (
     <table>
       <tbody>
@@ -14,7 +16,7 @@ export default function Board({ board }: Props) {
               <td
                 className="w-12 h-12"
                 key={l}
-                style={{ backgroundColor: `#${cell}` }}
+                style={{ backgroundColor: `#${colors[cell]}` }}
               ></td>
             ))}
           </tr>
