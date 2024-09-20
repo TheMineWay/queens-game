@@ -1,4 +1,4 @@
 /**
  * Each cell contains a HEX code representing its color
  */
-export type Board = number[][];
+export type Board = (number | null)[][];
