@@ -5,10 +5,11 @@ import Timer from "@/components/game/timer/timer";
 import { useTimer } from "@/hooks/utils/use-timer";
 import { generateBoard } from "@/utils/board/generator/generate-board.util";
 import { useState } from "react";
+import boardColors from "@/constants/colors/board-colors.json";
 
 export default function Game() {
   const timer = useTimer();
-  const [board] = useState(generateBoard({ size: 8 }));
+  const [board] = useState(generateBoard({ size: 10 }));
 
   return (
     <div className="w-full h-full flex flex-col gap-4 justify-center items-center">
@@ -16,18 +17,7 @@ export default function Game() {
       <Board
         board={{
           board: board,
-          colors: [
-            "FF0000",
-            "00FF00",
-            "0000FF",
-            "FF00FF",
-            "FFFF00",
-            "00FFFF",
-            "A9A9A9",
-            "16BA16",
-            "BABA16",
-            "BA16BA",
-          ],
+          colors: boardColors,
         }}
       />
     </div>

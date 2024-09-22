@@ -3,16 +3,18 @@ import { Board } from "@/types/game/board.type";
 type Position = { x: number; y: number };
 
 export class BoardBuilder {
-  private readonly board: Board;
+  constructor(private readonly board: Board) {}
 
-  constructor(size: number) {
-    this.board = BoardBuilder.generateEmptyBoard(size);
+  static fromSize(size: number) {
+    return new BoardBuilder(BoardBuilder.generateEmptyBoard(size));
   }
 
   public getBoard = () => this.board;
 
   // Position accessors
   public getPosition = ({ x, y }: Position) => this.getBoard()[x][y];
+  public setPosition = ({ x, y, value }: Position & { value: number | null }) =>
+    (this.board[x][y] = value);
   public isPositionInitialized = (position: Position) =>
     BoardBuilder.isCellValueInitialized(this.getPosition(position));
 
