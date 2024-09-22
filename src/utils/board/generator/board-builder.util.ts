@@ -19,7 +19,6 @@ export class BoardBuilder {
   // State checker
   public isInitialized = () => BoardBuilder.isBoardInitialized(this.getBoard());
 
-  // Internal utils
   static isBoardInitialized = (board: Board) => {
     for (const row of board) {
       for (const cell of row) {

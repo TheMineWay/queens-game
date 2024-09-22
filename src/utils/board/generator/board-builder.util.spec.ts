@@ -1,4 +1,4 @@
-import { BoardBuilder } from "@/utils/board/board-builder.util";
+import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
 
 describe("BoardBuilder util", () => {
   describe("isBoardInitialized(board) should return", () => {
