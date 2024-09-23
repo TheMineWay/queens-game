@@ -1,6 +1,74 @@
 import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
 
+const DEMO_BOARDS = [
+  [
+    [0, 0, 1, 1],
+    [2, 2, 2, 1],
+    [2, 3, 3, 3],
+    [4, 4, 4, 3],
+  ],
+  [
+    [1, 1, 1, 1],
+    [1, 0, 0, 0],
+    [1, 5, 5, 3],
+    [4, 5, 5, 3],
+  ],
+];
+
 describe("BoardBuilder util", () => {
+  describe("findAllPositionsByCode(code) should return", () => {
+    it("an empty array when no positions are found", () => {
+      const builder = new BoardBuilder(DEMO_BOARDS[0]);
+
+      const POSITIONS = [5, 6, -1, null, NaN];
+      POSITIONS.forEach((pos) =>
+        expect(builder.findAllPositionsByCode(pos)).toEqual([])
+      );
+    });
+
+    it("the position of present codes", () => {
+      const builder = new BoardBuilder(DEMO_BOARDS[0]);
+
+      const CASES = [
+        [
+          0,
+          [
+            { x: 0, y: 0 },
+            { x: 0, y: 1 },
+          ],
+          1,
+          [
+            { x: 0, y: 2 },
+            { x: 0, y: 3 },
+          ],
+          2,
+          [
+            { x: 1, y: 0 },
+            { x: 1, y: 1 },
+            { x: 1, y: 2 },
+            { x: 2, y: 0 },
+          ],
+        ],
+      ] as const;
+      CASES.forEach(([code, positions]) =>
+        expect(builder.findAllPositionsByCode(code)).toEqual(positions)
+      );
+    });
+  });
+
+  describe("findAllDistinctCodes() should return", () => {
+    it("all unique codes present in the board", () => {
+      const TEST_CASES = [
+        { board: DEMO_BOARDS[0], codes: [0, 1, 2, 3, 4] },
+        { board: DEMO_BOARDS[1], codes: [1, 0, 5, 3, 4] },
+      ];
+
+      TEST_CASES.forEach(({ board, codes }) =>
+        expect(new BoardBuilder(board).findAllDistinctCodes()).toEqual(codes)
+      );
+    });
+  });
+
   describe("isBoardInitialized(board) should return", () => {
     const TEST_CASES = {
       true: [

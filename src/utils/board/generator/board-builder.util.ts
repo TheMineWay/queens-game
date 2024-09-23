@@ -15,6 +15,23 @@ export class BoardBuilder {
   public getPosition = ({ x, y }: Position) => this.getBoard()[x][y];
   public setPosition = ({ x, y, value }: Position & { value: number | null }) =>
     (this.board[x][y] = value);
+  public findAllPositionsByCode = (code: Board[number][number]) => {
+    const positions: Position[] = [];
+
+    const board = this.getBoard();
+    for (let x = 0; x < board.length; x++) {
+      for (let y = 0; y < board[x].length; y++) {
+        if (board[x][y] === code) positions.push({ x, y });
+      }
+    }
+
+    return positions;
+  };
+  public findFirstPositionByCode = (code: Board[number][number]) =>
+    this.findAllPositionsByCode(code)?.[0] || null;
+
+  public findAllDistinctCodes = () => [...new Set(this.getBoard().flat())];
+
   public isPositionInitialized = (position: Position) =>
     BoardBuilder.isCellValueInitialized(this.getPosition(position));
 

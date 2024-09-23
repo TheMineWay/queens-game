@@ -1,5 +1,6 @@
 import { Board } from "@/types/game/board.type";
 import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
+import { fillBoard } from "@/utils/board/generator/board-fill/fill-board.util";
 import { getPossibleNextRowPositionsByRow } from "@/utils/board/generator/get-possible-next-row-positions-by-row.util";
 import { shuffleArray } from "@/utils/list/shuffle-array.util";
 
@@ -10,7 +11,7 @@ type Options = {
 export const generateBoard = ({ size }: Options): Board => {
   const builder = seedPrimordialColors(BoardBuilder.fromSize(size));
 
-  return builder.getBoard();
+  return fillBoard(builder).getBoard();
 };
 
 const seedPrimordialColors = (boardBuilder: BoardBuilder): BoardBuilder => {
