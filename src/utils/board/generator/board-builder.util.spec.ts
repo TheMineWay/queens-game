@@ -79,7 +79,7 @@ describe("BoardBuilder util", () => {
       });
     });
 
-    it.only("an array containing adjecent positions of a given code", () => {
+    it("an array containing adjecent positions of a given code", () => {
       const TEST_CASES = [
         {
           code: 1,
