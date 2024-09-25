@@ -1,3 +1,4 @@
+import { Board } from "@/types/game/board.type";
 import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
 
 const DEMO_BOARDS = [
@@ -14,6 +15,13 @@ const DEMO_BOARDS = [
     [4, 5, 5, 3],
   ],
 ];
+
+const mapBoard = (
+  board: (typeof DEMO_BOARDS)[0],
+  fn: (cell: Board[number][number]) => Board[number][number]
+) => {
+  return structuredClone(board).map((row) => row.map(fn));
+};
 
 describe("BoardBuilder util", () => {
   describe("findAllPositionsByCode(code) should return", () => {
@@ -52,6 +60,79 @@ describe("BoardBuilder util", () => {
       ] as const;
       CASES.forEach(([code, positions]) =>
         expect(builder.findAllPositionsByCode(code)).toEqual(positions)
+      );
+    });
+  });
+
+  describe("findEmptyAdjacentCellsByCode(code) should return", () => {
+    describe("an empty array when given", () => {
+      it("an unexisting code", () => {
+        expect(
+          new BoardBuilder(DEMO_BOARDS[0]).findEmptyAdjacentCellsByCode(5)
+        ).toEqual([]);
+      });
+
+      it("a code that is not surrounded by any empty cell", () => {
+        expect(
+          new BoardBuilder(DEMO_BOARDS[0]).findEmptyAdjacentCellsByCode(1)
+        ).toEqual([]);
+      });
+    });
+
+    it.only("an array containing adjecent positions of a given code", () => {
+      const TEST_CASES = [
+        {
+          code: 1,
+          board: mapBoard(DEMO_BOARDS[0], (cell) => (cell === 1 ? 1 : null)),
+          adjecent: [
+            [0, 1],
+            [1, 2],
+            [2, 3],
+          ],
+        },
+        {
+          code: 2,
+          board: mapBoard(DEMO_BOARDS[0], (cell) => (cell === 2 ? 2 : null)),
+          adjecent: [
+            [0, 0],
+            [0, 1],
+            [2, 1],
+            [1, 3],
+            [0, 2],
+            [2, 2],
+            [3, 0],
+          ],
+        },
+        {
+          code: 0,
+          board: mapBoard(DEMO_BOARDS[1], (cell) => (cell === 0 ? 0 : null)),
+          adjecent: [
+            [1, 0],
+            [0, 1],
+            [2, 1],
+            [0, 2],
+            [2, 2],
+            [0, 3],
+            [2, 3],
+          ],
+        },
+        {
+          code: 0,
+          board: mapBoard(DEMO_BOARDS[1], (cell) =>
+            cell === 0 ? 0 : cell === 1 ? 1 : null
+          ),
+          adjecent: [
+            [2, 1],
+            [2, 2],
+            [2, 3],
+          ],
+        },
+      ];
+
+      TEST_CASES.forEach(({ code, board, adjecent }) =>
+        expect(
+          new BoardBuilder(board).findEmptyAdjacentCellsByCode(code)
+        ).toEqual(adjecent.map(([x, y]) => ({ x, y })))
       );
     });
   });

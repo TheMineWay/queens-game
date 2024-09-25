@@ -32,6 +32,47 @@ export class BoardBuilder {
 
   public findAllDistinctCodes = () => [...new Set(this.getBoard().flat())];
 
+  public findEmptyAdjacentCellsByCode = (code: Board[number][number]) => {
+    const board = this.getBoard();
+    const positions: Position[] = [];
+
+    const testPosition = (position: Position) => {
+      if (
+        !positions.find(({ x, y }) => position.x === x && position.y === y) &&
+        !BoardBuilder.isCellValueInitialized(this.getPosition(position))
+      )
+        positions.push(position);
+    };
+
+    for (const position of this.findAllPositionsByCode(code)) {
+      const toTest = [
+        [0, -1],
+        [0, 1],
+        [-1, 0],
+        [1, 0],
+      ];
+
+      for (const [x, y] of toTest) {
+        const newPos = {
+          x: x + position.x,
+          y: y + position.y,
+        };
+
+        if (
+          newPos.x < 0 ||
+          newPos.y < 0 ||
+          newPos.x >= board.length ||
+          newPos.y >= board[newPos.x].length
+        )
+          continue;
+
+        testPosition(newPos);
+      }
+    }
+
+    return positions;
+  };
+
   public isPositionInitialized = (position: Position) =>
     BoardBuilder.isCellValueInitialized(this.getPosition(position));
 
