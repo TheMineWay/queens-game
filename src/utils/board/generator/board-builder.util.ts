@@ -1,6 +1,6 @@
 import { Board } from "@/types/game/board.type";
 
-type Position = { x: number; y: number };
+export type Position = { x: number; y: number };
 
 export class BoardBuilder {
   constructor(private readonly board: Board) {}
@@ -13,7 +13,7 @@ export class BoardBuilder {
 
   // Position accessors
   public getPosition = ({ x, y }: Position) => this.getBoard()[x][y];
-  public setPosition = ({ x, y, value }: Position & { value: number | null }) =>
+  public setPosition = ({ x, y }: Position, value: number | null) =>
     (this.board[x][y] = value);
   public findAllPositionsByCode = (code: Board[number][number]) => {
     const positions: Position[] = [];
@@ -30,7 +30,15 @@ export class BoardBuilder {
   public findFirstPositionByCode = (code: Board[number][number]) =>
     this.findAllPositionsByCode(code)?.[0] || null;
 
-  public findAllDistinctCodes = () => [...new Set(this.getBoard().flat())];
+  public findAllDistinctCodes = ({
+    onlyInitialized = true,
+  }: { onlyInitialized?: boolean } = {}) => {
+    const codes = [...new Set(this.getBoard().flat())];
+
+    if (onlyInitialized)
+      return codes.filter(BoardBuilder.isCellValueInitialized);
+    return codes;
+  };
 
   public findEmptyAdjacentCellsByCode = (code: Board[number][number]) => {
     const board = this.getBoard();

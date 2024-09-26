@@ -3,6 +3,7 @@ import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
 import { fillBoard } from "@/utils/board/generator/board-fill/fill-board.util";
 import { getPossibleNextRowPositionsByRow } from "@/utils/board/generator/get-possible-next-row-positions-by-row.util";
 import { shuffleArray } from "@/utils/list/shuffle-array.util";
+import { getRandomIndex } from "@/utils/randomization/get-random-index.util";
 
 type Options = {
   size: number; // Min should be 4
@@ -61,8 +62,4 @@ const seedPrimordialColors = (boardBuilder: BoardBuilder): BoardBuilder => {
         .filter((x) => !Number.isNaN(x)),
     })
   );
-};
-
-const getRandomIndex = <T>(arr: T[]): number => {
-  return Math.floor(Math.random() * arr.length);
 };

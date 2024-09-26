@@ -1,10 +1,8 @@
 import { Board } from "@/types/game/board.type";
 import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
 import { shuffleArray } from "@/utils/list/shuffle-array.util";
-import {
-  getRandomValueByProbability,
-  ProbabilityItem,
-} from "@/utils/randomization/get-random-value-by-probability.util";
+import { getRandomIndex } from "@/utils/randomization/get-random-index.util";
+import { getRandomValueByProbability } from "@/utils/randomization/get-random-value-by-probability.util";
 
 type Options = {
   lazyWorms?: boolean;
@@ -19,28 +17,55 @@ export const fillBoardWithWorm = (
   const board = new BoardBuilder(structuredClone(b.getBoard()));
   const wormsToMove = removeLazyWorms(lazyWorms, board.findAllDistinctCodes());
 
+  // Phase 1: use not lazy worms to generate the board
   while (wormsToMove.length > 0) {
     if (!shouldWormRest(restRounds)) continue;
 
     for (const worm of wormsToMove) {
-      moveWorm(board, worm, { maxStepSize });
-    }
+      const hasMoved = moveWorm(board, worm, { maxStepSize });
 
-    wormsToMove.pop(); // Avoid infinite loop
+      // If worm cannot keep moving, remove it from the array
+      if (!hasMoved) {
+        wormsToMove.splice(wormsToMove.indexOf(worm), 1);
+      }
+    }
   }
 
-  // No more codes able to move
-  // TODO: fill rest of board
+  // Phase 2: ensure all board is initialized by extending all codes
+  ensureBoardIsInitialized(board);
 
   return board;
+};
+
+export const ensureBoardIsInitialized = (board: BoardBuilder) => {
+  const worms = board.findAllDistinctCodes();
+  while (!board.isInitialized()) {
+    for (const wormId of worms) {
+      const hasMoved = moveWorm(board, wormId, { maxStepSize: 2 });
+
+      // If worm cannot keep moving, remove it from the array
+      if (!hasMoved) worms.splice(worms.indexOf(wormId), 1);
+    }
+
+    break;
+  }
 };
 
 // Worm ID stands for the code number of each cell
 const moveWorm = (
   builder: BoardBuilder,
   wormId: Board[number][number],
-  options: { maxStepSize?: number | null }
-) => {};
+  { maxStepSize = 1 }: { maxStepSize?: number | null }
+): boolean => {
+  for (let i = 0; maxStepSize === null || i < maxStepSize; i++) {
+    const positions = builder.findEmptyAdjacentCellsByCode(wormId);
+    if (positions.length <= 0) return false; // Cannot move
+
+    builder.setPosition(positions[getRandomIndex(positions)], wormId);
+  }
+
+  return true;
+};
 
 const shouldWormRest = (lazyRounds: boolean) => {
   if (!lazyRounds) return true;
