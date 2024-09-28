@@ -1,6 +1,5 @@
 import { Board } from "@/types/game/board.type";
-
-export type Position = { x: number; y: number };
+import { Position } from "@/types/game/board/position.type";
 
 export class BoardBuilder {
   constructor(private readonly board: Board) {}

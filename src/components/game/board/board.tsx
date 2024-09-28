@@ -1,12 +1,12 @@
 "use client";
 
-import { BoardDefinition } from "@/types/game/board-definition.interface";
+import { UseGame } from "@/hooks/game/use-game";
 import styles from "./board.module.css";
 
-type Props = { board: BoardDefinition };
+type Props = { colors: string[]; game: UseGame };
 
-export default function Board({ board: boardDefinition }: Props) {
-  const { board, colors } = boardDefinition;
+export default function Board({ colors, game }: Props) {
+  const { board } = game;
 
   const size = board[0]?.length ?? 0;
 
@@ -24,7 +24,8 @@ export default function Board({ board: boardDefinition }: Props) {
           <div
             key={`${i}-${l}`}
             style={{
-              backgroundColor: `#${colors[col]}`,
+              backgroundColor:
+                typeof col === "number" ? `#${colors[col]}` : undefined,
             }}
             className={styles.square}
           ></div>
