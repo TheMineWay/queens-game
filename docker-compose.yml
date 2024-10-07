@@ -1,0 +1,14 @@
+version: '3'
+name: queens-game
+services:
+  server:
+    container_name: queens-game
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '${PORT}:${PORT}'
+    expose:
+      - '${PORT}'
