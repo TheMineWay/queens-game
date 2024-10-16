@@ -12,3 +12,5 @@ services:
       - '${PORT}:${PORT}'
     expose:
       - '${PORT}'
+    tty: true
+    stdin_open: true
