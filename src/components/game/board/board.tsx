@@ -5,7 +5,7 @@ import styles from "./board.module.css";
 
 type Props = { colors: string[]; game: UseGame };
 
-export default function Board({ colors, game }: Props) {
+export default function Board({ colors, game }: Readonly<Props>) {
   const { board } = game;
 
   const size = board[0]?.length ?? 0;
