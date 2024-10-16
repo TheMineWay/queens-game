@@ -72,7 +72,7 @@ describe("<Board/>", () => {
     BOARD_MOCKS.forEach(({ boardDefinition, colorMap }) => {
       const { container } = renderComponent(boardDefinition);
       const cells = container.querySelectorAll<HTMLElement>(
-        'div[aria-label="board container"] > div'
+        'div[aria-label="board container"] > button'
       );
 
       for (let i = 0; i < boardDefinition.game.board.length; i++) {

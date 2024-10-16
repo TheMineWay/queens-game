@@ -1,12 +1,14 @@
 "use client";
-
 import { UseGame } from "@/hooks/game/use-game";
+import { PlayerBoardCellCode } from "@/types/game/player-board/player-board-cell-code.enum";
+import { Star, Close } from "@mui/icons-material";
+
 import styles from "./board.module.css";
 
 type Props = { colors: string[]; game: UseGame };
 
 export default function Board({ colors, game }: Readonly<Props>) {
-  const { board } = game;
+  const { board, playerBoard } = game;
 
   const size = board[0]?.length ?? 0;
 
@@ -21,16 +23,31 @@ export default function Board({ colors, game }: Readonly<Props>) {
     >
       {board.map((row, i) =>
         row.map((col, l) => (
-          <div
+          <button
             key={`${i}-${l}`}
             style={{
               backgroundColor:
                 typeof col === "number" ? `#${colors[col]}` : undefined,
             }}
             className={styles.square}
-          ></div>
+            onClick={() => playerBoard.interactWithCell({ x: i, y: l })}
+          >
+            <Marker code={playerBoard.board?.[i]?.[l]} />
+          </button>
         ))
       )}
     </div>
   );
 }
+
+type MarkerProps = { code: PlayerBoardCellCode };
+const Marker = ({ code = PlayerBoardCellCode.EMPTY }: MarkerProps) => {
+  switch (code) {
+    case PlayerBoardCellCode.MARKED:
+      return <Close />;
+    case PlayerBoardCellCode.QUEEN:
+      return <Star fontSize={"large"} />;
+    default:
+      return null;
+  }
+};
