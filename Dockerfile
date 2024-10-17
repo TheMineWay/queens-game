@@ -1,12 +1,10 @@
 FROM node:22-alpine3.19
-WORKDIR /
+WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
 
 RUN npm install
 
-# Bundle app source
 COPY . .
 
-EXPOSE $PORT
-CMD [ "npm", "run", "dev" ]
+CMD ["npm", "run", "dev"]

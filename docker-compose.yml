@@ -1,16 +1,13 @@
-version: '3'
-name: queens-game
+version: '3.5'
 services:
-  server:
-    container_name: queens-game
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - .env
+    container_name: docker-next
     ports:
       - '${PORT}:${PORT}'
-    expose:
-      - '${PORT}'
+    volumes:
+      - .:/app
+      - /app/node_modules
     tty: true
-    stdin_open: true
