@@ -1,4 +1,4 @@
-import { Board } from "@/types/game/board.type";
+import type { Board } from "@/types/game/board.type";
 import { BoardManager } from "@/utils/board/board-manager.util";
 
 export class BoardBuilder extends BoardManager {

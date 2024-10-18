@@ -2,8 +2,8 @@ import { Board } from "@/types/game/board.type";
 import { PlayerBoardCellCode } from "@/types/game/player-board/player-board-cell-code.enum";
 import { PlayerBoard } from "@/types/game/player-board/player-board.type";
 import {
+  type PlayerBoardIssues,
   detectPlayerBoardIssues,
-  PlayerBoardIssues,
 } from "@/utils/board/player-board/detect-player-board-issues.util";
 
 type TestCase = {
@@ -63,8 +63,8 @@ describe("detectPlayerBoardIssues(options) should", () => {
       },
     ];
 
-    it.each(CASES)("$message", ({ pb }) => {
-      expect(detectPlayerBoardIssues({ playerBoard: pb })).toEqual([]);
+    it.each(CASES)("$message", ({ pb, board }) => {
+      expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual([]);
     });
   });
 
@@ -120,8 +120,10 @@ describe("detectPlayerBoardIssues(options) should", () => {
       },
     ];
 
-    it.each(CASES)("$message", ({ pb, expect: expectObj }) => {
-      expect(detectPlayerBoardIssues({ playerBoard: pb })).toEqual(expectObj);
+    it.each(CASES)("$message", ({ pb, expect: expectObj, board }) => {
+      expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual(
+        expectObj
+      );
     });
   });
 });
