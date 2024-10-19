@@ -15,7 +15,9 @@ export const detectPlayerBoardIssues = ({
 }: DetectPlayerBoardIssuesOptions): PlayerBoardIssues => {
   const manager = new BoardManager(board);
   const queens = findQueensByPlayerBoard(playerBoard);
-  const issues: PlayerBoardIssues = [];
+  const issues: PlayerBoardIssues = BoardManager.generateEmptyBoard(
+    board.length
+  ).map((r) => r.map(() => false));
 
   addSameColorIssues(queens, manager, issues);
 
@@ -44,6 +46,7 @@ const addSameColorIssues = (
   manager: BoardManager,
   issues: PlayerBoardIssues
 ) => {
+  console.log(manager.findAllDistinctCodes());
   for (const color of manager.findAllDistinctCodes()) {
     const positions = manager.findAllPositionsByCode(color);
 
@@ -55,6 +58,8 @@ const addSameColorIssues = (
       }
     }
 
+    console.log({ queensInColor });
+
     if (queensInColor.length > 1) {
       // Issue
       for (const queen of queensInColor) {
@@ -62,4 +67,5 @@ const addSameColorIssues = (
       }
     }
   }
+  console.log({ issues });
 };

@@ -18,6 +18,12 @@ const E = PlayerBoardCellCode.EMPTY;
 const Q = PlayerBoardCellCode.QUEEN;
 
 const NO_ERRORS_ROW = [false, false, false, false];
+const NO_ERRORS_BOARD = [
+  NO_ERRORS_ROW,
+  NO_ERRORS_ROW,
+  NO_ERRORS_ROW,
+  NO_ERRORS_ROW,
+];
 
 const BOARDS: Board[] = [
   [
@@ -64,7 +70,9 @@ describe("detectPlayerBoardIssues(options) should", () => {
     ];
 
     it.each(CASES)("$message", ({ pb, board }) => {
-      expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual([]);
+      expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual(
+        NO_ERRORS_BOARD
+      );
     });
   });
 
