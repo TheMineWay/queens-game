@@ -22,6 +22,7 @@ export const detectPlayerBoardIssues = ({
   addSameColorIssues(queens, manager, issues);
   addSameAxisIssues(queens, issues, "x");
   addSameAxisIssues(queens, issues, "y");
+  addTouchingIssues(queens, issues);
 
   return issues;
 };
@@ -85,5 +86,21 @@ const addSameAxisIssues = (
     if (queens.length <= 1) continue;
 
     for (const queen of queens) issues[queen.x][queen.y] = true;
+  }
+};
+
+const addTouchingIssues = (queens: Position[], issues: PlayerBoardIssues) => {
+  for (const queen of queens) {
+    for (const compareTo of queens) {
+      if (compareTo.x === queen.x && compareTo.y === queen.y) continue;
+
+      const isTouching =
+        Math.abs(compareTo.x - queen.x) <= 1 &&
+        Math.abs(compareTo.y - queen.y) <= 1;
+
+      if (isTouching) {
+        issues[queen.x][queen.y] = true;
+      }
+    }
   }
 };

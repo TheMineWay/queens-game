@@ -32,6 +32,12 @@ const BOARDS: Board[] = [
     [3, 1, 1, 2],
     [3, 3, 2, 2],
   ],
+  [
+    [0, 0, 0, 1],
+    [0, 0, 0, 1],
+    [3, 2, 2, 2],
+    [3, 3, 2, 2],
+  ],
 ];
 
 describe("detectPlayerBoardIssues(options) should", () => {
@@ -76,8 +82,8 @@ describe("detectPlayerBoardIssues(options) should", () => {
     });
   });
 
-  describe("return errors", () => {
-    describe("when more than one queen is placed in", () => {
+  describe("return errors when", () => {
+    describe("more than one queen is placed in", () => {
       const CASES: TestCase[] = [
         {
           pb: [
@@ -134,6 +140,73 @@ describe("detectPlayerBoardIssues(options) should", () => {
           expectObj
         );
       });
+    });
+
+    it("queens are in touching positions", () => {
+      const SCENARIOS: Omit<TestCase, "message">[] = [
+        {
+          board: BOARDS[0],
+          expect: [
+            NO_ERRORS_ROW,
+            [false, true, false, false],
+            [false, false, true, false],
+            NO_ERRORS_ROW,
+          ],
+          pb: [
+            [E, E, E, E],
+            [E, Q, E, E],
+            [E, E, Q, E],
+            [E, E, E, E],
+          ],
+        },
+        {
+          board: BOARDS[0],
+          expect: [
+            NO_ERRORS_ROW,
+            NO_ERRORS_ROW,
+            [false, false, true, false],
+            [false, true, false, false],
+          ],
+          pb: [
+            [E, E, E, E],
+            [E, E, E, E],
+            [E, E, Q, E],
+            [E, Q, E, E],
+          ],
+        },
+      ];
+
+      for (const { board, expect: expectObj, pb } of SCENARIOS) {
+        expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual(
+          expectObj
+        );
+      }
+    });
+
+    it("a combined issues scenario is present", () => {
+      const SCENARIOS: Omit<TestCase, "message">[] = [
+        {
+          board: BOARDS[1],
+          expect: [
+            [false, false, false, true],
+            [true, false, false, false],
+            [false, true, false, true],
+            NO_ERRORS_ROW,
+          ],
+          pb: [
+            [E, E, E, Q],
+            [Q, E, E, E],
+            [E, Q, E, Q],
+            [E, E, E, E],
+          ],
+        },
+      ];
+
+      for (const { board, expect: expectObj, pb } of SCENARIOS) {
+        expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual(
+          expectObj
+        );
+      }
     });
   });
 });
