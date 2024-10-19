@@ -20,6 +20,8 @@ export const detectPlayerBoardIssues = ({
   ).map((r) => r.map(() => false));
 
   addSameColorIssues(queens, manager, issues);
+  addSameRowIssues(queens, issues);
+  addSameColIssues(queens, issues);
 
   return issues;
 };
@@ -46,7 +48,6 @@ const addSameColorIssues = (
   manager: BoardManager,
   issues: PlayerBoardIssues
 ) => {
-  console.log(manager.findAllDistinctCodes());
   for (const color of manager.findAllDistinctCodes()) {
     const positions = manager.findAllPositionsByCode(color);
 
@@ -58,8 +59,6 @@ const addSameColorIssues = (
       }
     }
 
-    console.log({ queensInColor });
-
     if (queensInColor.length > 1) {
       // Issue
       for (const queen of queensInColor) {
@@ -67,5 +66,36 @@ const addSameColorIssues = (
       }
     }
   }
-  console.log({ issues });
+};
+
+const addSameRowIssues = (queens: Position[], issues: PlayerBoardIssues) => {
+  const grouped: Record<number, Position[]> = {};
+
+  for (const queen of queens) {
+    if (!Object.keys(grouped).includes(queen.x.toString()))
+      grouped[queen.x] = [];
+    grouped[queen.x].push(queen);
+  }
+
+  for (const [, queens] of Object.entries(grouped)) {
+    if (queens.length <= 1) continue;
+
+    for (const queen of queens) issues[queen.x][queen.y] = true;
+  }
+};
+
+const addSameColIssues = (queens: Position[], issues: PlayerBoardIssues) => {
+  const grouped: Record<number, Position[]> = {};
+
+  for (const queen of queens) {
+    if (!Object.keys(grouped).includes(queen.y.toString()))
+      grouped[queen.y] = [];
+    grouped[queen.y].push(queen);
+  }
+
+  for (const [, queens] of Object.entries(grouped)) {
+    if (queens.length <= 1) continue;
+
+    for (const queen of queens) issues[queen.x][queen.y] = true;
+  }
 };
