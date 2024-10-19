@@ -20,8 +20,8 @@ export const detectPlayerBoardIssues = ({
   ).map((r) => r.map(() => false));
 
   addSameColorIssues(queens, manager, issues);
-  addSameRowIssues(queens, issues);
-  addSameColIssues(queens, issues);
+  addSameAxisIssues(queens, issues, "x");
+  addSameAxisIssues(queens, issues, "y");
 
   return issues;
 };
@@ -68,29 +68,17 @@ const addSameColorIssues = (
   }
 };
 
-const addSameRowIssues = (queens: Position[], issues: PlayerBoardIssues) => {
+const addSameAxisIssues = (
+  queens: Position[],
+  issues: PlayerBoardIssues,
+  axis: keyof Position
+) => {
   const grouped: Record<number, Position[]> = {};
 
   for (const queen of queens) {
-    if (!Object.keys(grouped).includes(queen.x.toString()))
-      grouped[queen.x] = [];
-    grouped[queen.x].push(queen);
-  }
-
-  for (const [, queens] of Object.entries(grouped)) {
-    if (queens.length <= 1) continue;
-
-    for (const queen of queens) issues[queen.x][queen.y] = true;
-  }
-};
-
-const addSameColIssues = (queens: Position[], issues: PlayerBoardIssues) => {
-  const grouped: Record<number, Position[]> = {};
-
-  for (const queen of queens) {
-    if (!Object.keys(grouped).includes(queen.y.toString()))
-      grouped[queen.y] = [];
-    grouped[queen.y].push(queen);
+    if (!Object.keys(grouped).includes(queen[axis].toString()))
+      grouped[queen[axis]] = [];
+    grouped[queen[axis]].push(queen);
   }
 
   for (const [, queens] of Object.entries(grouped)) {
