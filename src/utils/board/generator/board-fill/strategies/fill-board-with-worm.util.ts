@@ -1,5 +1,5 @@
 import { Board } from "@/types/game/board.type";
-import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
+import { BoardManager } from "@/utils/board/board-manager.util";
 import { shuffleArray } from "@/utils/list/shuffle-array.util";
 import { getRandomIndex } from "@/utils/randomization/get-random-index.util";
 import { getRandomValueByProbability } from "@/utils/randomization/get-random-value-by-probability.util";
@@ -11,10 +11,10 @@ type Options = {
 };
 
 export const fillBoardWithWorm = (
-  b: BoardBuilder,
+  b: BoardManager,
   { lazyWorms = false, maxStepSize = 1, restRounds = false }: Options = {}
-): BoardBuilder => {
-  const board = new BoardBuilder(structuredClone(b.getBoard()));
+): BoardManager => {
+  const board = new BoardManager(structuredClone(b.getBoard()));
   const wormsToMove = removeLazyWorms(lazyWorms, board.findAllDistinctCodes());
 
   // Phase 1: use not lazy worms to generate the board
@@ -37,7 +37,7 @@ export const fillBoardWithWorm = (
   return board;
 };
 
-export const ensureBoardIsInitialized = (board: BoardBuilder) => {
+export const ensureBoardIsInitialized = (board: BoardManager) => {
   const worms = board.findAllDistinctCodes();
   while (!board.isInitialized()) {
     for (const wormId of worms) {
@@ -53,7 +53,7 @@ export const ensureBoardIsInitialized = (board: BoardBuilder) => {
 
 // Worm ID stands for the code number of each cell
 const moveWorm = (
-  builder: BoardBuilder,
+  builder: BoardManager,
   wormId: Board[number][number],
   { maxStepSize = 1 }: { maxStepSize?: number | null }
 ): boolean => {

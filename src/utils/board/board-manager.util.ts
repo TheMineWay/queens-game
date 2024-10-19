@@ -1,5 +1,4 @@
 import { Board } from "@/types/game/board.type";
-import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
 
 import { Position } from "@/types/game/board/position.type";
 
@@ -32,7 +31,7 @@ export class BoardManager {
     const codes = [...new Set(this.getBoard().flat())];
 
     if (onlyInitialized)
-      return codes.filter(BoardBuilder.isCellValueInitialized);
+      return codes.filter(BoardManager.isCellValueInitialized);
     return codes;
   };
 
@@ -43,7 +42,7 @@ export class BoardManager {
     const testPosition = (position: Position) => {
       if (
         !positions.find(({ x, y }) => position.x === x && position.y === y) &&
-        !BoardBuilder.isCellValueInitialized(this.getPosition(position))
+        !BoardManager.isCellValueInitialized(this.getPosition(position))
       )
         positions.push(position);
     };
@@ -78,8 +77,35 @@ export class BoardManager {
   };
 
   public isPositionInitialized = (position: Position) =>
-    BoardBuilder.isCellValueInitialized(this.getPosition(position));
+    BoardManager.isCellValueInitialized(this.getPosition(position));
 
   // State checker
-  public isInitialized = () => BoardBuilder.isBoardInitialized(this.getBoard());
+  public isInitialized = () => BoardManager.isBoardInitialized(this.getBoard());
+
+  static fromSize(size: number) {
+    return new BoardManager(BoardManager.generateEmptyBoard(size));
+  }
+
+  static isBoardInitialized = (board: Board) => {
+    for (const row of board) {
+      for (const cell of row) {
+        if (!BoardManager.isCellValueInitialized(cell)) return false;
+      }
+    }
+    return true;
+  };
+  static isCellValueInitialized = (cellValue?: number | null) =>
+    typeof cellValue === "number" && !Number.isNaN(cellValue);
+  static generateEmptyBoard = (size: number) => {
+    const board: Board = [];
+
+    for (let i = 0; i < size; i++) {
+      board.push([]);
+      for (let l = 0; l < size; l++) {
+        board[i].push(null);
+      }
+    }
+
+    return board;
+  };
 }

@@ -1,5 +1,5 @@
 import { Board } from "@/types/game/board.type";
-import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
+import { BoardManager } from "@/utils/board/board-manager.util";
 
 export const getPossibleNextRowPositionsByRow = (
   row: Board[number],
@@ -24,7 +24,7 @@ export const getPossibleNextRowPositionsByRow = (
     // If any position is initialized, the position is valid. Otherwise, it is not.
     if (
       positionsToCheck.every(
-        (p) => !BoardBuilder.isCellValueInitialized(row[p])
+        (p) => !BoardManager.isCellValueInitialized(row[p])
       )
     ) {
       validPositions.push(pos);

@@ -1,5 +1,5 @@
 import { Board } from "@/types/game/board.type";
-import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
+import { BoardManager } from "@/utils/board/board-manager.util";
 import { fillBoard } from "@/utils/board/generator/board-fill/fill-board.util";
 import { getPossibleNextRowPositionsByRow } from "@/utils/board/generator/get-possible-next-row-positions-by-row.util";
 import { shuffleArray } from "@/utils/list/shuffle-array.util";
@@ -10,12 +10,12 @@ type Options = {
 };
 
 export const generateBoard = ({ size }: Options): Board => {
-  const builder = seedPrimordialColors(BoardBuilder.fromSize(size));
+  const builder = seedPrimordialColors(BoardManager.fromSize(size));
 
   return fillBoard(builder).getBoard();
 };
 
-const seedPrimordialColors = (boardBuilder: BoardBuilder): BoardBuilder => {
+const seedPrimordialColors = (boardManager: BoardManager): BoardManager => {
   const deepSeed = ({
     depth = 0,
     available,
@@ -50,10 +50,10 @@ const seedPrimordialColors = (boardBuilder: BoardBuilder): BoardBuilder => {
   };
 
   // Pick a random cell from the first row
-  const board = boardBuilder.getBoard();
+  const board = boardManager.getBoard();
   board[0][getRandomIndex(board[0])] = 0;
 
-  return new BoardBuilder(
+  return new BoardManager(
     deepSeed({
       depth: 1,
       board,

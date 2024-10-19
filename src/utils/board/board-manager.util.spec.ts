@@ -1,5 +1,5 @@
 import { Board } from "@/types/game/board.type";
-import { BoardBuilder } from "@/utils/board/generator/board-builder.util";
+import { BoardManager } from "@/utils/board/board-manager.util";
 
 const DEMO_BOARDS = [
   [
@@ -23,10 +23,10 @@ const mapBoard = (
   return structuredClone(board).map((row) => row.map(fn));
 };
 
-describe("BoardBuilder util", () => {
+describe("BoardManager util", () => {
   describe("findAllPositionsByCode(code) should return", () => {
     it("an empty array when no positions are found", () => {
-      const builder = new BoardBuilder(DEMO_BOARDS[0]);
+      const builder = new BoardManager(DEMO_BOARDS[0]);
 
       const POSITIONS = [5, 6, -1, null, NaN];
       POSITIONS.forEach((pos) =>
@@ -35,7 +35,7 @@ describe("BoardBuilder util", () => {
     });
 
     it("the position of present codes", () => {
-      const builder = new BoardBuilder(DEMO_BOARDS[0]);
+      const builder = new BoardManager(DEMO_BOARDS[0]);
 
       const CASES = [
         [
@@ -68,13 +68,13 @@ describe("BoardBuilder util", () => {
     describe("an empty array when given", () => {
       it("an unexisting code", () => {
         expect(
-          new BoardBuilder(DEMO_BOARDS[0]).findEmptyAdjacentCellsByCode(5)
+          new BoardManager(DEMO_BOARDS[0]).findEmptyAdjacentCellsByCode(5)
         ).toEqual([]);
       });
 
       it("a code that is not surrounded by any empty cell", () => {
         expect(
-          new BoardBuilder(DEMO_BOARDS[0]).findEmptyAdjacentCellsByCode(1)
+          new BoardManager(DEMO_BOARDS[0]).findEmptyAdjacentCellsByCode(1)
         ).toEqual([]);
       });
     });
@@ -131,7 +131,7 @@ describe("BoardBuilder util", () => {
 
       TEST_CASES.forEach(({ code, board, adjecent }) =>
         expect(
-          new BoardBuilder(board).findEmptyAdjacentCellsByCode(code)
+          new BoardManager(board).findEmptyAdjacentCellsByCode(code)
         ).toEqual(adjecent.map(([x, y]) => ({ x, y })))
       );
     });
@@ -145,7 +145,7 @@ describe("BoardBuilder util", () => {
       ];
 
       TEST_CASES.forEach(({ board, codes }) =>
-        expect(new BoardBuilder(board).findAllDistinctCodes()).toEqual(codes)
+        expect(new BoardManager(board).findAllDistinctCodes()).toEqual(codes)
       );
     });
   });
@@ -195,7 +195,7 @@ describe("BoardBuilder util", () => {
           }fully initialized ${testData.length}x${
             testData.length
           } board`, () => {
-            expect(BoardBuilder.isBoardInitialized(testData)).toEqual(
+            expect(BoardManager.isBoardInitialized(testData)).toEqual(
               expectedReturn
             );
           });
@@ -239,7 +239,7 @@ describe("BoardBuilder util", () => {
     ];
 
     it.each(TEST_CASES)("$name", ({ size, expect: expectObj }) => {
-      expect(BoardBuilder.generateEmptyBoard(size)).toEqual(expectObj);
+      expect(BoardManager.generateEmptyBoard(size)).toEqual(expectObj);
     });
   });
 
@@ -247,13 +247,13 @@ describe("BoardBuilder util", () => {
     it("false when given non initialized values", () => {
       const values = [null, NaN, undefined];
       for (const value of values)
-        expect(BoardBuilder.isCellValueInitialized(value)).toBeFalsy();
+        expect(BoardManager.isCellValueInitialized(value)).toBeFalsy();
     });
 
     it("true when given initialized values", () => {
       const values = [1, -1, 0, 5, -12];
       for (const value of values)
-        expect(BoardBuilder.isCellValueInitialized(value)).toBeTruthy();
+        expect(BoardManager.isCellValueInitialized(value)).toBeTruthy();
     });
   });
 });
