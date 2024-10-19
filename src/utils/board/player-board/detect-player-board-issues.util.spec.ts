@@ -69,61 +69,63 @@ describe("detectPlayerBoardIssues(options) should", () => {
   });
 
   describe("return errors", () => {
-    const CASES: TestCase[] = [
-      {
-        pb: [
-          [E, Q, Q, E],
-          [E, E, E, E],
-          [Q, E, E, E],
-          [M, E, E, Q],
-        ],
-        expect: [
-          [false, true, true, false],
-          NO_ERRORS_ROW,
-          NO_ERRORS_ROW,
-          NO_ERRORS_ROW,
-        ],
-        board: BOARDS[0],
-        message: "more than one queen is placed in the same row",
-      },
-      {
-        pb: [
-          [E, E, E, Q],
-          [E, E, E, E],
-          [Q, E, E, E],
-          [E, E, E, Q],
-        ],
-        expect: [
-          [false, false, false, true],
-          NO_ERRORS_ROW,
-          NO_ERRORS_ROW,
-          [false, false, false, true],
-        ],
-        board: BOARDS[0],
-        message: "more than one queen is placed in the same col",
-      },
-      {
-        pb: [
-          [Q, Q, E, E],
-          [E, E, E, E],
-          [E, E, E, E],
-          [E, E, E, Q],
-        ],
-        expect: [
-          [true, true, false, false],
-          NO_ERRORS_ROW,
-          NO_ERRORS_ROW,
-          NO_ERRORS_ROW,
-        ],
-        board: BOARDS[0],
-        message: "more than one queen is placed in the same color",
-      },
-    ];
+    describe("when more than one queen is placed in", () => {
+      const CASES: TestCase[] = [
+        {
+          pb: [
+            [E, Q, Q, E],
+            [E, E, E, E],
+            [Q, E, E, E],
+            [M, E, E, Q],
+          ],
+          expect: [
+            [false, true, true, false],
+            NO_ERRORS_ROW,
+            NO_ERRORS_ROW,
+            NO_ERRORS_ROW,
+          ],
+          board: BOARDS[0],
+          message: "the same row",
+        },
+        {
+          pb: [
+            [E, E, E, Q],
+            [E, E, E, E],
+            [Q, E, E, E],
+            [E, E, E, Q],
+          ],
+          expect: [
+            [false, false, false, true],
+            NO_ERRORS_ROW,
+            NO_ERRORS_ROW,
+            [false, false, false, true],
+          ],
+          board: BOARDS[0],
+          message: "the same col",
+        },
+        {
+          pb: [
+            [Q, Q, E, E],
+            [E, E, E, E],
+            [E, E, E, E],
+            [E, E, E, Q],
+          ],
+          expect: [
+            [true, true, false, false],
+            NO_ERRORS_ROW,
+            NO_ERRORS_ROW,
+            NO_ERRORS_ROW,
+          ],
+          board: BOARDS[0],
+          message: "the same color",
+        },
+      ];
 
-    it.each(CASES)("$message", ({ pb, expect: expectObj, board }) => {
-      expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual(
-        expectObj
-      );
+      it.each(CASES)("$message", ({ pb, expect: expectObj, board }) => {
+        expect(detectPlayerBoardIssues({ playerBoard: pb, board })).toEqual(
+          expectObj
+        );
+      });
     });
   });
 });
