@@ -2,6 +2,7 @@
 import { UseGame } from "@/hooks/game/use-game";
 import { PlayerBoardCellCode } from "@/types/game/player-board/player-board-cell-code.enum";
 import { Star, Close } from "@mui/icons-material";
+import clsx from "clsx";
 
 import styles from "./board.module.css";
 
@@ -29,7 +30,9 @@ export default function Board({ colors, game }: Readonly<Props>) {
               backgroundColor:
                 typeof col === "number" ? `#${colors[col]}` : undefined,
             }}
-            className={styles.square}
+            className={clsx(styles.square, {
+              [styles.issue]: playerBoard.issues?.[i]?.[l],
+            })}
             onClick={() => playerBoard.interactWithCell({ x: i, y: l })}
           >
             <Marker code={playerBoard.board?.[i]?.[l]} />
@@ -46,7 +49,7 @@ const Marker = ({ code = PlayerBoardCellCode.EMPTY }: MarkerProps) => {
     case PlayerBoardCellCode.MARKED:
       return <Close />;
     case PlayerBoardCellCode.QUEEN:
-      return <Star fontSize={"large"} />;
+      return <Star fontSize="large" />;
     default:
       return null;
   }

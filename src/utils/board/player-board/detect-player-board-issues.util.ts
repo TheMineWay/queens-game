@@ -99,6 +99,7 @@ const addTouchingIssues = (queens: Position[], issues: PlayerBoardIssues) => {
         Math.abs(compareTo.y - queen.y) <= 1;
 
       if (isTouching) {
+        console.log("detected same color");
         issues[queen.x][queen.y] = true;
       }
     }

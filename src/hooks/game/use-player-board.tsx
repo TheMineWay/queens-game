@@ -2,7 +2,11 @@ import { Board } from "@/types/game/board.type";
 import { Position } from "@/types/game/board/position.type";
 import { PlayerBoardCellCode } from "@/types/game/player-board/player-board-cell-code.enum";
 import { PlayerBoard } from "@/types/game/player-board/player-board.type";
-import { useState } from "react";
+import {
+  detectPlayerBoardIssues,
+  PlayerBoardIssues,
+} from "@/utils/board/player-board/detect-player-board-issues.util";
+import { useEffect, useState } from "react";
 
 type Options = {
   board: Board;
@@ -12,6 +16,15 @@ export const usePlayerBoard = ({ board: gameBoard }: Options) => {
   const [board, setBoard] = useState<PlayerBoard>(
     generateEmptyBoardFromGameBoard(gameBoard)
   );
+  const [issues, setIssues] = useState<PlayerBoardIssues>(
+    generateEmptyIssuesBoard(gameBoard)
+  );
+
+  useEffect(() => {
+    setIssues([
+      ...detectPlayerBoardIssues({ board: gameBoard, playerBoard: board }),
+    ]);
+  }, [board, gameBoard]);
 
   // Board state management
   const updateCell = ({ x, y }: Position, value: PlayerBoardCellCode) => {
@@ -38,10 +51,20 @@ export const usePlayerBoard = ({ board: gameBoard }: Options) => {
     updateCell({ x, y }, newCode);
   };
 
-  return { board, setBoard, interactWithCell, updatePosition: updateCell };
+  return {
+    board,
+    setBoard,
+    interactWithCell,
+    updatePosition: updateCell,
+    issues,
+    setIssues,
+  };
 };
 
 export type UsePlayerBoard = ReturnType<typeof usePlayerBoard>;
 
 const generateEmptyBoardFromGameBoard = (board: Board) =>
   board.map((row) => row.map(() => PlayerBoardCellCode.EMPTY));
+
+const generateEmptyIssuesBoard = (board: Board): PlayerBoardIssues =>
+  board.map((row) => row.map(() => false));
